@@ -1,0 +1,18 @@
+var myJS = "<%= run_script %>";
+var lang = 1246973031;
+
+var myApp = null;
+
+try{
+  myApp = WScript.CreateObject("<%= app_name %>");
+}catch(e1){
+  try{
+    myApp = WScript.CreateObject("<%= app_name %>_J");
+  }catch(e){
+    // Error
+  }
+}
+
+if(myApp!==null){
+  myApp.doScript(myJS,lang);
+}

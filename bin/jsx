@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require 'jsx'
+require 'optparse'
+
+defaults = {:run => true, :compile => true, :include => [], :with_directory => false}
+Version = Jsx::VERSION
+opt = OptionParser.new
+opt.on('-c','--compile','compile only'){|v| defaults[:run] = false}
+opt.on('-n','--no-compile','run script without compile'){|v| defaults[:compile] = false}
+opt.on('-i','--include','include current directory with preprocesser environment'){|v| defaults[:with_directory] = true} 
+opt.parse!(ARGV)
+
+if defaults[:run]
+  opt = {:compile => defaults[:compile], :include => defaults[:include], :with_directory => defaults[:with_directory]}
+  Jsx.run!(ARGV.shift, opt){|out,err|
+    if err.empty?
+      puts out unless out.empty?
+    else
+      puts err
+    end
+  }
+else
+  opt = {:include => defaults[:include], :with_directory => defaults[:with_directory]}
+  inp = ARGV.shift
+  out = ARGV.shift || nil
+  Jsx.compile inp, out, opt
+end

@@ -1,0 +1,6 @@
+var __log = new File(\"<%= @logfile.path %>\");
+__log.encoding=\"UTF8\";
+__log.lineFeed=\"<%= @line_feed %>\";
+__log.open(\"e\");
+$.write=function(){__log.seek(0,2);__log.write(arguments[0])};
+$.writeln=function(){__log.seek(0,2);__log.writeln(arguments[0])};      

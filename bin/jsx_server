@@ -1,0 +1,76 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require 'jsx'
+require 'optparse'
+require 'tempfile'
+require 'sinatra/base'
+require 'json'
+
+defaults = {:port => 3000}
+opt = OptionParser.new
+opt.on('-p PORT','--port PORT','config server port'){|v| defaults[:port] = v}
+opt.parse!(ARGV)
+
+class JsxServer < Sinatra::Base
+  post '/post' do
+    ret = {:success => true, :script_output => ''}
+    output = ''
+    script = params[:script]
+    jsx = Tempfile.new(['','.jsx'])
+
+    jsx.open
+    jsx.write script
+    jsx.close
+
+    begin
+      res = Jsx.run!(jsx.path,{:compile => true, :with_directory => false})
+      jsx.close!
+      
+      ret[:success] = res[:success]
+      ret[:script_output] = res[:output]
+      ret[:message] = res[:message] unless res[:message].empty?
+
+    rescue => e
+      ret[:success] = false
+      ret[:message] = e
+    end
+
+    content_type 'application/json'
+    ret.to_json
+  end
+
+  post '/save' do
+    as = params[:as]
+    script = params[:script]
+    mod_script = ''
+
+    inp_jsx = Tempfile.new(['','.jsx'])
+    mod_jsx = Tempfile.new(['','.jsx'])
+
+    inp_jsx.open
+    inp_jsx.write script
+    inp_jsx.close
+
+    Jsx.compile inp_jsx.path, mod_jsx.path, {:with_directory => false, :include => []}
+
+    mod_script = File.open(mod_jsx.path).read
+
+    inp_jsx.close!
+    mod_jsx.close!
+
+    if as=='file'
+      content_type 'text/javascript'
+      attachement 'do.jsx'
+      mod_script
+    else
+      content_type 'application/json'
+      {:success => true, :script => script, :mod_script => mod_script}.to_json
+    end
+
+  end
+end
+
+JsxServer.run! :host => 'localhost', :port => defaults[:port]
+
