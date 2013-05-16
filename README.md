@@ -6,7 +6,7 @@ Executing Adobe ExtendScript from Ruby, with preprocessor.
 
 Add this line to your application's Gemfile:
 
-    gem 'jsx'
+    gem 'jsx', :git => 'git://github.com/nbqx/jsx.git', :branch => 'master'
 
 And then execute:
 
@@ -14,7 +14,9 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install jsx
+    $ git clone git://github.com/nbqx/jsx.git
+    $ cd jsx
+    $ rake install
 
 ## Usage
 
