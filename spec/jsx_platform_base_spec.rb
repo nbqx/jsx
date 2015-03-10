@@ -42,6 +42,10 @@ describe Jsx::Platform::Base do
       @osx.find_target("#target 'indesign 8.0'").should eql ['indesign','8.0']
     end
 
+    it "should be ['indesign','9.2']" do
+      @osx.find_target("#target 'indesign 9.2'").should eql ['indesign','9.2']
+    end
+
     it "should be ['indesign','0.0']" do
       @osx.find_target("#target 'indesign 0.0'").should eql ['indesign','0.0']
     end

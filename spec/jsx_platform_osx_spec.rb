@@ -25,6 +25,17 @@ describe Jsx::Platform::OSX do
     end
   end
 
+  context "Platform::OSX InDesign CC" do
+    before do
+      @jsx = fixture_path+'cc.jsx'
+      @osx = Jsx::Platform::OSX.new @jsx
+    end
+
+    it "should be collect application name and version" do
+      @osx.get_app_name.should eql 'Adobe InDesign CC'
+    end
+  end
+
   context "without target-line jsx file" do
     before do
       @jsx = fixture_path+'without_target_line.jsx'
