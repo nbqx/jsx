@@ -23,8 +23,9 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"
+  spec.add_development_dependency "rspec", "~> 2.0"
 
-  spec.add_dependency "sprockets"
+  spec.add_dependency "sprockets", "~> 2.2.0"
   spec.add_dependency "sinatra"
   spec.add_dependency "json"
 end
